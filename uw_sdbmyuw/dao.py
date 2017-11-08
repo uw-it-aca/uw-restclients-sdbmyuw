@@ -1,4 +1,3 @@
-import logging
 import os
 from os.path import abspath, dirname
 from restclients_core.dao import DAO

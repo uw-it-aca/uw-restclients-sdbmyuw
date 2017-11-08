@@ -1,6 +1,6 @@
 from unittest import TestCase
 from uw_sdbmyuw.models import (has_no_ug_app, set_campus,
-                               set_data, ApplicationStatus)
+                               parse_statuses, ApplicationStatus)
 
 
 class ModelsTest(TestCase):
@@ -26,14 +26,14 @@ class ModelsTest(TestCase):
         html_data = ('The UW does not have an active undergraduate ' +
                      'application on file for you.')
         self.assertTrue(has_no_ug_app(html_data))
-        status = ApplicationStatus.create(html_data)
+        status = parse_statuses(html_data)[0]
         self.assertTrue(status.no_ug_app)
 
-    def test_set_data(self):
+    def test_parse_statuses(self):
         html_data = '<b>UW Seattle Campus Applications:</b>' +\
                     'Freshman Application: autumn quarter 2017'
-        status = ApplicationStatus()
-        set_data(status, html_data)
+
+        status = parse_statuses(html_data)[0]
         self.assertEqual(status.json_data(),
                          {'is_freshman': True,
                           'is_seattle': True,
@@ -46,10 +46,11 @@ class ModelsTest(TestCase):
                           'quarter': 'autumn',
                           'is_international_post_bac': False,
                           'no_ug_app': False})
+
         html_data = '<b>UW Bothell Campus Applications:</b>' +\
                     'Transfer Application: autumn quarter 2016'
-        status = ApplicationStatus()
-        set_data(status, html_data)
+
+        status = parse_statuses(html_data)[0]
         self.assertEqual(status.json_data(),
                          {'is_freshman': False,
                           'is_seattle': False,
@@ -62,26 +63,26 @@ class ModelsTest(TestCase):
                           'quarter': 'autumn',
                           'is_international_post_bac': False,
                           'no_ug_app': False})
+
         html_data = 'on your returning student application to the UW Seattle,'
-        status = ApplicationStatus()
-        set_data(status, html_data)
+        status = parse_statuses(html_data)[0]
         self.assertTrue(status.is_returning)
         self.assertTrue(status.is_seattle)
+
         html_data = '<b>UW Tacoma Campus Applications:</b>' +\
                     'International Postbaccalaureate Application: ' +\
                     'autumn quarter 2017'
-        set_data(status, html_data)
+
+        status = parse_statuses(html_data)[0]
         self.assertTrue(status.is_international_post_bac)
         self.assertTrue(status.is_tacoma)
         self.assertEqual(status.quarter, 'autumn')
         self.assertEqual(status.year, 2017)
+
         html_data = '<b>UW Bothell Campus Applications:</b>' +\
                     'Nonmatriculated Application: winter quarter 2018'
-        set_data(status, html_data)
+        status = parse_statuses(html_data)[0]
         self.assertTrue(status.is_ug_non_matriculated)
         self.assertTrue(status.is_bothell)
         self.assertEqual(status.quarter, 'winter')
         self.assertEqual(status.year, 2018)
-        status = ApplicationStatus.create(html_data)
-        self.assertIsNotNone(status.json_data())
-        self.assertIsNotNone(status.__str__())
