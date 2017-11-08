@@ -5,7 +5,7 @@ This is the interface for interacting with the Sdbmyuw service.
 import re
 from uw_sdbmyuw.dao import Sdbmyuw_DAO
 from restclients_core.exceptions import DataFailureException
-from uw_sdbmyuw.models import ApplicationStatus
+from uw_sdbmyuw.models import ApplicationStatus, parse_statuses
 from uw_sdbmyuw.exceptions import InvalidSystemKey
 
 
@@ -31,7 +31,7 @@ def get_app_status(system_key):
         raise Exception("%s Unexpected Response Data: %s" %
                         (url, response.data))
 
-    status = ApplicationStatus.create(response.data)
+    status = parse_statuses(response.data)
     return status
 
 

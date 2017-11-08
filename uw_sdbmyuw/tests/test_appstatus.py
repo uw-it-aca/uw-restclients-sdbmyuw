@@ -20,30 +20,58 @@ class AppStatusTest(TestCase):
         self.assertTrue(invalid_system_key(None))
 
     def test_get_app_status(self):
-        status = get_app_status('000000001')
-        self.assertIsNotNone(status)
-        self.assertTrue(status.is_freshman)
-        self.assertTrue(status.is_seattle)
-        self.assertTrue(status.is_bothell)
+        statuses = get_app_status('000000001')
+        self.assertIsNotNone(statuses)
+        self.assertEqual(len(statuses), 2)
+        self.assertTrue(statuses[0].is_freshman)
+        self.assertTrue(statuses[0].is_bothell)
 
-        status = get_app_status('000000002')
-        self.assertTrue(status.is_international_post_bac)
-        self.assertTrue(status.is_tacoma)
-        self.assertTrue(status.is_bothell)
+        self.assertTrue(statuses[1].is_freshman)
+        self.assertTrue(statuses[1].is_seattle)
 
-        status = get_app_status('000000003')
-        self.assertTrue(status.is_returning)
-        self.assertTrue(status.is_seattle)
+        statuses = get_app_status('000000002')
+        self.assertTrue(statuses[0].is_international_post_bac)
+        self.assertTrue(statuses[0].is_bothell)
 
-        status = get_app_status('000000004')
-        self.assertTrue(status.is_transfer)
-        self.assertTrue(status.is_seattle)
+        self.assertTrue(statuses[1].is_international_post_bac)
+        self.assertTrue(statuses[1].is_tacoma)
 
-        status = get_app_status('000000005')
+        statuses = get_app_status('000000003')
+        self.assertTrue(statuses[0].is_returning)
+        self.assertTrue(statuses[0].is_seattle)
+
+        statuses = get_app_status('000000004')
+        self.assertTrue(statuses[0].is_transfer)
+        self.assertTrue(statuses[0].is_bothell)
+
+        self.assertTrue(statuses[1].is_transfer)
+        self.assertTrue(statuses[1].is_seattle)
+
+        status = get_app_status('000000005')[0]
         self.assertTrue(status.is_ug_non_matriculated)
         self.assertTrue(status.is_bothell)
         self.assertEqual(status.quarter, "winter")
         self.assertEqual(status.year, 2018)
 
-        status = get_app_status('000000006')
+        status = get_app_status('000000006')[0]
         self.assertTrue(status.no_ug_app)
+
+        statuses = get_app_status('000000007')
+
+        status = statuses[0]
+        self.assertTrue(status.is_bothell)
+        self.assertTrue(status.is_freshman)
+        self.assertEqual(status.quarter, "autumn")
+        self.assertEqual(status.year, 2017)
+
+        status = statuses[1]
+        self.assertTrue(status.is_seattle)
+        self.assertTrue(status.is_freshman)
+        self.assertEqual(status.quarter, "autumn")
+        self.assertEqual(status.year, 2017)
+
+        status = statuses[2]
+        self.assertTrue(status.is_tacoma)
+        self.assertTrue(status.is_freshman)
+        self.assertEqual(status.quarter, "autumn")
+        self.assertEqual(status.year, 2017)
