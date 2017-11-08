@@ -75,5 +75,3 @@ class AppStatusTest(TestCase):
         self.assertTrue(status.is_freshman)
         self.assertEqual(status.quarter, "autumn")
         self.assertEqual(status.year, 2017)
-
-
