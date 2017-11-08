@@ -55,3 +55,25 @@ class AppStatusTest(TestCase):
 
         status = get_app_status('000000006')[0]
         self.assertTrue(status.no_ug_app)
+
+        statuses = get_app_status('000000007')
+
+        status = statuses[0]
+        self.assertTrue(status.is_bothell)
+        self.assertTrue(status.is_freshman)
+        self.assertEqual(status.quarter, "autumn")
+        self.assertEqual(status.year, 2017)
+
+        status = statuses[1]
+        self.assertTrue(status.is_seattle)
+        self.assertTrue(status.is_freshman)
+        self.assertEqual(status.quarter, "autumn")
+        self.assertEqual(status.year, 2017)
+
+        status = statuses[2]
+        self.assertTrue(status.is_tacoma)
+        self.assertTrue(status.is_freshman)
+        self.assertEqual(status.quarter, "autumn")
+        self.assertEqual(status.year, 2017)
+
+
