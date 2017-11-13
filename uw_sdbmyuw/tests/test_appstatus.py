@@ -30,10 +30,12 @@ class AppStatusTest(TestCase):
         self.assertTrue(statuses[1].is_seattle)
 
         statuses = get_app_status('000000002')
-        self.assertTrue(statuses[0].is_international_post_bac)
+        self.assertTrue(statuses[0].is_post_bac)
+        self.assertTrue(statuses[0].is_international)
         self.assertTrue(statuses[0].is_bothell)
 
-        self.assertTrue(statuses[1].is_international_post_bac)
+        self.assertTrue(statuses[1].is_post_bac)
+        self.assertTrue(statuses[1].is_international)
         self.assertTrue(statuses[1].is_tacoma)
 
         statuses = get_app_status('000000003')
