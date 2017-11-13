@@ -44,7 +44,9 @@ class ModelsTest(TestCase):
                           'is_returning': False,
                           'is_ug_non_matriculated': False,
                           'quarter': 'autumn',
-                          'is_international_post_bac': False,
+                          'is_international': False,
+                          'is_post_bac': False,
+                          'type': 'Freshman',
                           'no_ug_app': False})
 
         html_data = '<b>UW Bothell Campus Applications:</b>' +\
@@ -61,7 +63,9 @@ class ModelsTest(TestCase):
                           'is_returning': False,
                           'is_ug_non_matriculated': False,
                           'quarter': 'autumn',
-                          'is_international_post_bac': False,
+                          'is_international': False,
+                          'type': 'Transfer',
+                          'is_post_bac': False,
                           'no_ug_app': False})
 
         html_data = 'on your returning student application to the UW Seattle,'
@@ -74,10 +78,40 @@ class ModelsTest(TestCase):
                     'autumn quarter 2017'
 
         status = parse_statuses(html_data)[0]
-        self.assertTrue(status.is_international_post_bac)
-        self.assertTrue(status.is_tacoma)
-        self.assertEqual(status.quarter, 'autumn')
-        self.assertEqual(status.year, 2017)
+        self.assertEqual(status.json_data(),
+                         {'is_freshman': False,
+                          'is_seattle': False,
+                          'is_bothell': False,
+                          'is_tacoma': True,
+                          'year': 2017,
+                          'is_transfer': False,
+                          'is_returning': False,
+                          'is_ug_non_matriculated': False,
+                          'quarter': 'autumn',
+                          'is_international': True,
+                          'type': 'International Postbaccalaureate',
+                          'is_post_bac': True,
+                          'no_ug_app': False})
+
+        html_data = '<b>UW Tacoma Campus Applications:</b>' +\
+                    'Postbaccalaureate Application: ' +\
+                    'autumn quarter 2017'
+
+        status = parse_statuses(html_data)[0]
+        self.assertEqual(status.json_data(),
+                         {'is_freshman': False,
+                          'is_seattle': False,
+                          'is_bothell': False,
+                          'is_tacoma': True,
+                          'year': 2017,
+                          'is_transfer': False,
+                          'is_returning': False,
+                          'is_ug_non_matriculated': False,
+                          'quarter': 'autumn',
+                          'type': 'Postbaccalaureate',
+                          'is_international': False,
+                          'is_post_bac': True,
+                          'no_ug_app': False})
 
         html_data = '<b>UW Bothell Campus Applications:</b>' +\
                     'Nonmatriculated Application: winter quarter 2018'

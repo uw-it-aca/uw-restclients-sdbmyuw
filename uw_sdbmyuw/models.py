@@ -10,7 +10,8 @@ class ApplicationStatus(models.Model):
     no_ug_app = models.BooleanField(default=False)
     is_freshman = models.BooleanField(default=False)
     is_returning = models.BooleanField(default=False)
-    is_international_post_bac = models.BooleanField(default=False)
+    is_post_bac = models.BooleanField(default=False)
+    is_international = models.BooleanField(default=False)
     is_transfer = models.BooleanField(default=False)
     is_ug_non_matriculated = models.BooleanField(default=False)
     quarter = models.CharField(max_length=16, null=True, blank=True)
@@ -23,13 +24,27 @@ class ApplicationStatus(models.Model):
             'is_tacoma': self.is_tacoma,
             'no_ug_app': self.no_ug_app,
             'is_freshman': self.is_freshman,
-            'is_international_post_bac': self.is_international_post_bac,
+            'is_international': self.is_international,
+            'is_post_bac': self.is_post_bac,
             'is_returning': self.is_returning,
             'is_transfer': self.is_transfer,
             'is_ug_non_matriculated': self.is_ug_non_matriculated,
             'quarter': self.quarter,
             'year': self.year
         }
+
+        if data['is_freshman']:
+            data['type'] = "Freshman"
+        elif data['is_post_bac']:
+            data['type'] = "Postbaccalaureate"
+        elif data['is_ug_non_matriculated']:
+            data['type'] = "Nonmatriculated"
+        elif data['is_transfer']:
+            data['type'] = "Transfer"
+
+        if 'type' in data and data['is_international']:
+            data['type'] = "International " + data['type']
+
         return data
 
     def __str__(self):
@@ -51,7 +66,8 @@ RETURN_PATTERN =\
 APP_PATTERN = re.compile(
     '>([ A-Za-z]+) application: ([a-z]+) quarter (\d{4})', re.I)
 FRESHMAN = "freshman"
-INTERNATIONAL_POST_BAC = "international postbaccalaureate"
+INTERNATIONAL = "international"
+POST_BAC = "postbaccalaureate"
 TRANSFER = "transfer"
 UNDERGRADUATE_NON_MATRICULATED = "nonmatriculated"
 
@@ -89,20 +105,22 @@ def parse_statuses(html_data):
         matched_str = re.search(APP_PATTERN, application_data)
         if matched_str is not None:
             if matched_str.group(1) is not None:
-
                 apptype = matched_str.group(1).lower()
 
-                if FRESHMAN == apptype:
+                if FRESHMAN in apptype:
                     status.is_freshman = True
 
-                if INTERNATIONAL_POST_BAC == apptype:
-                    status.is_international_post_bac = True
+                if POST_BAC in apptype:
+                    status.is_post_bac = True
 
-                if TRANSFER == apptype:
+                if TRANSFER in apptype:
                     status.is_transfer = True
 
-                if UNDERGRADUATE_NON_MATRICULATED == apptype:
+                if UNDERGRADUATE_NON_MATRICULATED in apptype:
                     status.is_ug_non_matriculated = True
+
+                if INTERNATIONAL in apptype:
+                    status.is_international = True
 
             if matched_str.group(2) is not None:
                 status.quarter = matched_str.group(2).lower()
