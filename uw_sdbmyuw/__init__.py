@@ -3,7 +3,6 @@ This is the interface for interacting with the Sdbmyuw service.
 
 """
 import re
-
 import restclients_core
 from uw_sdbmyuw.dao import Sdbmyuw_DAO
 from restclients_core.exceptions import DataFailureException
