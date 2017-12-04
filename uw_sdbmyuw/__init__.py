@@ -3,6 +3,8 @@ This is the interface for interacting with the Sdbmyuw service.
 
 """
 import re
+
+import restclients_core
 from uw_sdbmyuw.dao import Sdbmyuw_DAO
 from restclients_core.exceptions import DataFailureException
 from uw_sdbmyuw.models import ApplicationStatus, parse_statuses
@@ -28,8 +30,9 @@ def get_app_status(system_key):
         raise DataFailureException(url, response.status, response.data)
 
     if len(response.data) == 0:
-        raise Exception("%s Unexpected Response Data: %s" %
-                        (url, response.data))
+        is_cached = type(response) == restclients_core.models.MockHttp
+        raise Exception("%s Unexpected Response Data: %s, from cache: %s" %
+                        (url, response.data, str(is_cached)))
 
     status = parse_statuses(response.data)
     return status
