@@ -1,6 +1,9 @@
 from unittest import TestCase
+
+import restclients_core
 from restclients_core.exceptions import DataFailureException
-from uw_sdbmyuw import get_app_status, get_appstatus_url, invalid_system_key
+from uw_sdbmyuw import get_app_status, get_appstatus_url, invalid_system_key, \
+    Sdbmyuw_DAO
 from uw_sdbmyuw.exceptions import InvalidSystemKey
 from uw_sdbmyuw.util import fdao_sdbmyuw_override
 
@@ -77,3 +80,7 @@ class AppStatusTest(TestCase):
         self.assertTrue(status.is_freshman)
         self.assertEqual(status.quarter, "autumn")
         self.assertEqual(status.year, 2017)
+
+    def test_empty_body(self):
+        with self.assertRaises(Exception):
+            statuses = get_app_status('000000000')
