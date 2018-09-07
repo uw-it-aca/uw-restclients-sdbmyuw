@@ -52,8 +52,8 @@ class ApplicationStatus(models.Model):
 
 
 NO_UG_APP = re.compile(
-    'The UW does not have an active undergraduate ' +
-    'application on file for you.',
+    r'The UW does not have an active undergraduate ' +
+    r'application on file for you.',
     re.I)
 
 
@@ -61,10 +61,10 @@ def has_no_ug_app(text):
     return re.search(NO_UG_APP, text) is not None
 
 
-RETURN_PATTERN =\
-    re.compile('returning student application to the UW ([BST][a-z]+),', re.I)
+RETURN_PATTERN = re.compile(
+    r'returning student application to the UW ([BST][a-z]+),', re.I)
 APP_PATTERN = re.compile(
-    '>([ A-Za-z]+) application: ([a-z]+) quarter (\d{4})', re.I)
+    r'>([ A-Za-z]+) application: ([a-z]+) quarter (\d{4})', re.I)
 FRESHMAN = "freshman"
 INTERNATIONAL = "international"
 POST_BAC = "postbaccalaureate"
@@ -133,7 +133,7 @@ def parse_statuses(html_data):
     return statuses
 
 
-CAMPUS_PATTERN = re.compile('<b>UW [BST][a-z]+ Campus Applications:</b>')
+CAMPUS_PATTERN = re.compile(r'<b>UW [BST][a-z]+ Campus Applications:</b>')
 BOT = "Bothell"
 SEA = "Seattle"
 TAC = "Tacoma"
