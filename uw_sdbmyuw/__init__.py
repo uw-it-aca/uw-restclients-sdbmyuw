@@ -25,15 +25,16 @@ def get_app_status(system_key):
 
     url = get_appstatus_url(system_key)
     response = DAO.getURL(url, {})
+    response_data = str(response.data)
     if response.status != 200:
-        raise DataFailureException(url, response.status, response.data)
+        raise DataFailureException(url, response.status, response_data)
 
     if len(response.data) == 0:
-        is_cached = type(response) == restclients_core.models.MockHttp
+        is_cached = (type(response) == restclients_core.models.MockHttp)
         raise Exception("%s Unexpected Response Data: %s, from cache: %s" %
-                        (url, response.data, str(is_cached)))
+                        (url, response_data, str(is_cached)))
 
-    status = parse_statuses(response.data)
+    status = parse_statuses(response_data)
     return status
 
 
@@ -41,8 +42,8 @@ def get_appstatus_url(system_key):
     return ("/sdb_MyUW/appstatus.asp?s=%s" % system_key)
 
 
-SYSTEM_KEY_PATTERN = re.compile('^\d{9}$')
-ALLZERO_PATTERN = re.compile('^[0]+$')
+SYSTEM_KEY_PATTERN = re.compile(r'^\d{9}$')
+ALLZERO_PATTERN = re.compile(r'^[0]+$')
 
 
 def invalid_system_key(system_key_str):
