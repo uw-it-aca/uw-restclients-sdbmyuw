@@ -65,7 +65,6 @@ class AppStatusTest(TestCase):
         self.assertTrue(status.no_ug_app)
 
         statuses = get_app_status('000000007')
-
         status = statuses[0]
         self.assertTrue(status.is_bothell)
         self.assertTrue(status.is_freshman)
@@ -83,6 +82,14 @@ class AppStatusTest(TestCase):
         self.assertTrue(status.is_freshman)
         self.assertEqual(status.quarter, "autumn")
         self.assertEqual(status.year, 2017)
+
+        # bothell freshman 2022 autumn
+        statuses = get_app_status('000000008')
+        self.assertEqual(len(statuses), 1)
+        status = statuses[0]
+        self.assertTrue(status.is_bothell)
+        self.assertTrue(status.is_freshman)
+        self.assertEqual(status.quarter, "autumn")
 
     def test_empty_body(self):
         with self.assertRaises(Exception):
