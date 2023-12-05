@@ -34,7 +34,7 @@ def get_app_status(system_key):
         raise DataFailureException(url, response.status, response_data)
 
     if len(response.data) == 0:
-        is_cached = (type(response) == restclients_core.models.MockHttp)
+        is_cached = isinstance(response, restclients_core.models.MockHttp)
         raise Exception(
             "{} Unexpected Response Data: {}, from cache: {}".format(
                 url, response_data, str(is_cached)))
