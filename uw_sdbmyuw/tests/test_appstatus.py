@@ -1,4 +1,4 @@
-# Copyright 2024 UW-IT, University of Washington
+# Copyright 2025 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
 from unittest import TestCase
@@ -91,6 +91,8 @@ class AppStatusTest(TestCase):
         self.assertTrue(status.is_freshman)
         self.assertEqual(status.quarter, "autumn")
 
-    def test_empty_body(self):
-        with self.assertRaises(Exception):
-            statuses = get_app_status('000000000')
+    def test_error_cases(self):
+        self.assertRaises(
+            DataFailureException, get_app_status, '100000001')
+        self.assertRaises(
+            DataFailureException, get_app_status, '000000009')

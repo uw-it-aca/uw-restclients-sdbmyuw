@@ -1,4 +1,4 @@
-# Copyright 2024 UW-IT, University of Washington
+# Copyright 2025 UW-IT, University of Washington
 # SPDX-License-Identifier: Apache-2.0
 
 """
@@ -32,15 +32,9 @@ def get_app_status(system_key):
     response_data = str(response.data)
     if response.status != 200:
         raise DataFailureException(url, response.status, response_data)
-
     if len(response.data) == 0:
-        is_cached = isinstance(response, restclients_core.models.MockHttp)
-        raise Exception(
-            "{} Unexpected Response Data: {}, from cache: {}".format(
-                url, response_data, str(is_cached)))
-
-    status = parse_statuses(response_data)
-    return status
+        raise DataFailureException(url, 543, "status 200 but missing data")
+    return parse_statuses(response_data)
 
 
 def get_appstatus_url(system_key):
