@@ -67,7 +67,7 @@ def has_no_ug_app(text):
 RETURN_PATTERN = re.compile(
     r'returning student application to the UW ([BST][a-z]+),', re.I)
 APP_PATTERN = re.compile(
-    r'>([ A-Za-z]+) application: ([a-z]+) quarter (\d{4})', re.I)
+    r'>([- A-Za-z]+) application: ([a-z]+) quarter (\d{4})', re.I)
 INTERNATIONAL = "international"
 POST_BAC = "postbaccalaureate"
 TRANSFER = "transfer"
