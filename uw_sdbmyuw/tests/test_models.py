@@ -49,7 +49,7 @@ class ModelsTest(TestCase):
                           'quarter': 'autumn',
                           'is_international': False,
                           'is_post_bac': False,
-                          'type': 'Freshman',
+                          'type': 'First-year',
                           'no_ug_app': False})
 
         html_data = '<b>UW Bothell Campus Applications:</b>' +\
