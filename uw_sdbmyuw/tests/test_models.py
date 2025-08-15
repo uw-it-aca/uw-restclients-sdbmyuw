@@ -49,9 +49,9 @@ class ModelsTest(TestCase):
                           'quarter': 'autumn',
                           'is_international': False,
                           'is_post_bac': False,
-                          'type': 'Freshman',
+                          'type': 'First-year',
                           'no_ug_app': False})
-
+        self.assertIsNotNone(str(status))
         html_data = '<b>UW Bothell Campus Applications:</b>' +\
                     'Transfer Application: autumn quarter 2016'
 
