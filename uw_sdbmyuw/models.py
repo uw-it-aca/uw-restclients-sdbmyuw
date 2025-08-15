@@ -37,7 +37,7 @@ class ApplicationStatus(models.Model):
         }
 
         if data['is_freshman']:
-            data['type'] = "Freshman"
+            data['type'] = "First-year"
         elif data['is_post_bac']:
             data['type'] = "Postbaccalaureate"
         elif data['is_ug_non_matriculated']:
@@ -67,8 +67,7 @@ def has_no_ug_app(text):
 RETURN_PATTERN = re.compile(
     r'returning student application to the UW ([BST][a-z]+),', re.I)
 APP_PATTERN = re.compile(
-    r'>([ A-Za-z]+) application: ([a-z]+) quarter (\d{4})', re.I)
-FRESHMAN = "freshman"
+    r'>([- A-Za-z]+) application: ([a-z]+) quarter (\d{4})', re.I)
 INTERNATIONAL = "international"
 POST_BAC = "postbaccalaureate"
 TRANSFER = "transfer"
@@ -110,7 +109,7 @@ def parse_statuses(html_data):
             if matched_str.group(1) is not None:
                 apptype = matched_str.group(1).lower()
 
-                if FRESHMAN in apptype:
+                if "freshman" in apptype or "first-year" in apptype:
                     status.is_freshman = True
 
                 if POST_BAC in apptype:
